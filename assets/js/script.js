@@ -12,13 +12,17 @@ var currentWeatherContainer = $("#current-weather");
 var textInput = document.getElementById('search-city');
 
 function getApi() {
+    // get weather data
     var city = $("#search-city").val();
     console.log(city);
     var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
     var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
     console.log(weatherUrl);
+    // clear any previous information
     $(currentWeatherContainer).empty();
     textInput.value = "";
+
+    // create elements and display current weather data
     fetch(weatherUrl)
         .then(function (response) {
             return response.json();
@@ -36,12 +40,13 @@ function getApi() {
             var pHumidityEl = $('<p>').text("Humidity: " + data.main.humidity + "%");
             currentWeatherContainer.append(pHumidityEl);
 
+            // get coordinates to use for uv index
             var cityLongitude = data.coord.lon;
             var cityLattitude = data.coord.lat;
-
+            // get uv index
             var uvIndexUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLattitude + "&lon=" + cityLongitude + "&exclude=hourly,daily,minutely&appid=" + apiKey;
 
-
+            // display uv index & use foor loop to coordinate color with uv intensity
             fetch(uvIndexUrl)
                 .then(function (response) {
                     return response.json();
