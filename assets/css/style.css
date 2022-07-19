@@ -1,0 +1,40 @@
+.jumbotron {
+    background-image: linear-gradient(to right, blue ,darkblue);
+}
+
+.page-header {
+    color: white;
+}
+
+.current-weather {
+    border: solid 2px black;
+}
+
+.search-history {
+    border-top: solid 2px black;
+    margin-top: 10px;
+}
+
+.card {
+    margin: 5px;
+}
+
+.green {
+background-color: green;
+}
+
+.orange {
+background-color: orange;
+}
+
+.red {
+background-color: red;
+}
+
+.yellow {
+background-color: yellow;
+}
+
+.purple {
+background-color: purple;
+}
