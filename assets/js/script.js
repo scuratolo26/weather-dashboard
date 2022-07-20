@@ -15,7 +15,7 @@ var fiveDayEl = $("#five-day");
 var searchHistContainerEl = $("#searchHistoryContainer");
 // FUNCTION TO SAVE SEARCH HISTORY
 var searchHist = [];
-var city = "";
+var city = "tampa";
 function searchCity() {
     city = $("#search-city").val();
     if (city === "") {
@@ -79,7 +79,7 @@ function fiveDayForecast() {
             })
             for (let i = 0; i < futureWeather.length; i++) {
                 var divCardEl = $('<div>');
-                divCardEl.attr('class', 'card text-white bg-primary mb-3 cardOne');
+                divCardEl.attr('class', 'card text-white bg-primary m-1');
                 divCardEl.attr('style', 'max-width: 200px;');
                 fiveDayEl.append(divCardEl);
 
@@ -173,23 +173,23 @@ function getWeatherNow() {
     fiveDayForecast();
 };
 
-
-
 function loadButtons() {
-
     var searchHistStore = JSON.parse(localStorage.getItem('city'));
 
     if (searchHistStore !== null) {
         searchHist = searchHistStore
     }
-
     setHistoryButtons();
+    getWeatherNow();
 };
+
+
 
 $("#clear-history").on("click", function (event) {
     event.preventDefault();
     localStorage.clear();
     location.reload();
+
 });
 
 searchButton.addEventListener('click', searchCity);

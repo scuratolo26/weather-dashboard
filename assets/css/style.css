@@ -15,10 +15,6 @@
     margin-top: 10px;
 }
 
-.card {
-    margin: 5px;
-}
-
 .green {
 background-color: green;
 padding: 5px;
@@ -54,4 +50,18 @@ padding: 5px;
 #clear-history {
     margin: 5px;
     width: 100%;
+}
+
+.icons {
+    height: 80px;
+    width: 80px;
+}
+
+.search {
+    width: 70%;
+    height: 40px;
+}
+
+#searchBtn {
+    width: 25%;
 }
