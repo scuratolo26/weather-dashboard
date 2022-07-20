@@ -10,7 +10,9 @@ today = mm + '/' + dd + '/' + yyyy;
 var searchButton = document.getElementById('searchBtn');
 var currentWeatherContainer = $("#current-weather");
 var textInput = document.getElementById('search-city');
-
+var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
+var fiveDayEl = $("#five-day");
+var searchHistContainerEl = $("#searchHistoryContainer");
 // FUNCTION TO SAVE SEARCH HISTORY
 var searchHist = [];
 var city = "";
@@ -21,16 +23,17 @@ function searchCity() {
     };
     searchHist.push(city);
     localStorage.setItem('city', JSON.stringify(searchHist));
-    console.log(searchHist);
     // CALL FUNCTION TO GET CURRENT WEATHER
     setHistoryButtons();
     getWeatherNow();
+    fiveDayEl.empty();
 };
 
-var searchHistContainerEl = $("#searchHistoryContainer");
+
 
 function setHistoryButtons() {
     searchHistContainerEl.empty();
+
     for (let i = 0; i < searchHist.length; i++) {
         var buttonRowEl = $('<row>');
         var buttonEl = $('<button>').text(searchHist[i]);
@@ -41,15 +44,68 @@ function setHistoryButtons() {
 
         searchHistContainerEl.prepend(buttonRowEl);
         buttonRowEl.append(buttonEl);
-    } if (!city) {
-        return;
-    };
+    }
     $(".historyBtn").on("click", function (event) {
         event.preventDefault();
         city = $(this).text();
-        console.log(city);
+        fiveDayEl.empty();
         getWeatherNow();
     });
+};
+
+function fiveDayForecast() {
+
+    var fiveDayUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + apiKey;
+
+    fetch(fiveDayUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            var futureArray = data.list;
+            var futureWeather = [];
+            $.each(futureArray, function (index, value) {
+                fiveDayObj = {
+                    date: value.dt_txt.split(' ')[0],
+                    time: value.dt_txt.split(' ')[1],
+                    temp: value.main.temp,
+                    icon: value.weather[0].icon,
+                    wind: value.wind.speed,
+                    humidity: value.main.humidity
+                }
+                if (value.dt_txt.split(' ')[1] === "12:00:00") {
+                    futureWeather.push(fiveDayObj);
+                }
+            })
+            for (let i = 0; i < futureWeather.length; i++) {
+                var divCardEl = $('<div>');
+                divCardEl.attr('class', 'card text-white bg-primary mb-3 cardOne');
+                divCardEl.attr('style', 'max-width: 200px;');
+                fiveDayEl.append(divCardEl);
+
+                var divDateEl = $('<div>');
+                divDateEl.attr('class', 'card-header')
+                var m = moment(`${futureWeather[i].date}`).format('MM-DD-YYYY');
+                divDateEl.text(m);
+                divCardEl.append(divDateEl)
+
+                var divBodyEL = $('<div>');
+                divBodyEL.attr('class', 'card-body');
+                divCardEl.append(divBodyEL);
+
+                var iconEl = $('<img>');
+                iconEl.attr('class', 'icons');
+                iconEl.attr('src', `https://openweathermap.org/img/wn/${futureWeather[i].icon}@2x.png`);
+                divBodyEL.append(iconEl);
+
+                var pTempEl1 = $('<p>').text(`Temp: ${futureWeather[i].temp} °F`);
+                divBodyEL.append(pTempEl1);
+                var pWindEl1 = $('<p>').text(`Wind: ${futureWeather[i].wind} MPH`);
+                divBodyEL.append(pWindEl1);
+                var pHumidEl = $('<p>').text(`Humidity: ${futureWeather[i].humidity} %`);
+                divBodyEL.append(pHumidEl);
+            }
+        });
 };
 
 // FUNCTION TO GET CURRENT WEATHER
@@ -59,7 +115,7 @@ function getWeatherNow() {
     };
     // get weather data
     console.log(city);
-    var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
+
     var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
     console.log(weatherUrl);
     // clear any previous information
@@ -114,7 +170,10 @@ function getWeatherNow() {
                     }
                 });
         });
+    fiveDayForecast();
 };
+
+
 
 function loadButtons() {
 
@@ -123,11 +182,15 @@ function loadButtons() {
     if (searchHistStore !== null) {
         searchHist = searchHistStore
     }
-    searchCity();
+
     setHistoryButtons();
-    getWeatherNow();
-    console.log("loaded");
 };
+
+$("#clear-history").on("click", function (event) {
+    event.preventDefault();
+    localStorage.clear();
+    location.reload();
+});
 
 searchButton.addEventListener('click', searchCity);
 loadButtons();

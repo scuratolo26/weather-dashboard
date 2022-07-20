@@ -6,9 +6,9 @@
     color: white;
 }
 
-.current-weather {
+/* .current-weather {
     border: solid 2px black;
-}
+} */
 
 .search-history {
     border-top: solid 2px black;
@@ -21,25 +21,37 @@
 
 .green {
 background-color: green;
+padding: 5px;
 }
 
 .orange {
 background-color: orange;
+padding: 5px;
 }
 
 .red {
 background-color: red;
+color: white;
+padding: 5px;
 }
 
 .yellow {
 background-color: yellow;
+padding: 5px;
 }
 
 .purple {
 background-color: purple;
+color: white;
+padding: 5px;
 }
 
 .historyBtn {
+    margin: 5px;
+    width: 100%;
+}
+
+#clear-history {
     margin: 5px;
     width: 100%;
 }
