@@ -56,7 +56,7 @@ function setHistoryButtons() {
 function getWeatherNow() {
     if (city === "") {
         return;
-    }
+    };
     // get weather data
     console.log(city);
     var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
@@ -123,9 +123,11 @@ function loadButtons() {
     if (searchHistStore !== null) {
         searchHist = searchHistStore
     }
+    searchCity();
     setHistoryButtons();
     getWeatherNow();
+    console.log("loaded");
 };
 
-loadButtons();
 searchButton.addEventListener('click', searchCity);
+loadButtons();
