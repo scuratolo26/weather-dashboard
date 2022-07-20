@@ -31,9 +31,7 @@ var searchHistContainerEl = $("#searchHistoryContainer");
 
 function setHistoryButtons() {
     searchHistContainerEl.empty();
-    console.log("called");
     for (let i = 0; i < searchHist.length; i++) {
-        console.log("called2");
         var buttonRowEl = $('<row>');
         var buttonEl = $('<button>').text(searchHist[i]);
 
@@ -45,16 +43,24 @@ function setHistoryButtons() {
         buttonRowEl.append(buttonEl);
     } if (!city) {
         return;
-    }
+    };
+    $(".historyBtn").on("click", function (event) {
+        event.preventDefault();
+        city = $(this).text();
+        console.log(city);
+        getWeatherNow();
+    });
 };
 
 // FUNCTION TO GET CURRENT WEATHER
 function getWeatherNow() {
+    if (city === "") {
+        return;
+    }
     // get weather data
-    var city1 = $("#search-city").val();
-    console.log(city1);
+    console.log(city);
     var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
-    var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city1 + "&appid=" + apiKey + "&units=imperial";
+    var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
     console.log(weatherUrl);
     // clear any previous information
     $(currentWeatherContainer).empty();
@@ -118,9 +124,8 @@ function loadButtons() {
         searchHist = searchHistStore
     }
     setHistoryButtons();
+    getWeatherNow();
 };
 
 loadButtons();
 searchButton.addEventListener('click', searchCity);
-
-
