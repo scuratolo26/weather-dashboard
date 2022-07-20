@@ -38,3 +38,8 @@ background-color: yellow;
 .purple {
 background-color: purple;
 }
+
+.historyBtn {
+    margin: 5px;
+    width: 100%;
+}

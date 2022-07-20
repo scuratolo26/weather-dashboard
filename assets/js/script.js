@@ -11,12 +11,50 @@ var searchButton = document.getElementById('searchBtn');
 var currentWeatherContainer = $("#current-weather");
 var textInput = document.getElementById('search-city');
 
-function getApi() {
+// FUNCTION TO SAVE SEARCH HISTORY
+var searchHist = [];
+var city = "";
+function searchCity() {
+    city = $("#search-city").val();
+    if (city === "") {
+        return;
+    };
+    searchHist.push(city);
+    localStorage.setItem('city', JSON.stringify(searchHist));
+    console.log(searchHist);
+    // CALL FUNCTION TO GET CURRENT WEATHER
+    setHistoryButtons();
+    getWeatherNow();
+};
+
+var searchHistContainerEl = $("#searchHistoryContainer");
+
+function setHistoryButtons() {
+    searchHistContainerEl.empty();
+    console.log("called");
+    for (let i = 0; i < searchHist.length; i++) {
+        console.log("called2");
+        var buttonRowEl = $('<row>');
+        var buttonEl = $('<button>').text(searchHist[i]);
+
+        buttonRowEl.addClass('row');
+        buttonEl.addClass('btn btn-secondary historyBtn');
+        buttonEl.attr('type', 'button');
+
+        searchHistContainerEl.prepend(buttonRowEl);
+        buttonRowEl.append(buttonEl);
+    } if (!city) {
+        return;
+    }
+};
+
+// FUNCTION TO GET CURRENT WEATHER
+function getWeatherNow() {
     // get weather data
-    var city = $("#search-city").val();
-    console.log(city);
+    var city1 = $("#search-city").val();
+    console.log(city1);
     var apiKey = "2a18a4bd088cf490e2961f33d5aaf971";
-    var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=imperial";
+    var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city1 + "&appid=" + apiKey + "&units=imperial";
     console.log(weatherUrl);
     // clear any previous information
     $(currentWeatherContainer).empty();
@@ -72,6 +110,17 @@ function getApi() {
         });
 };
 
-searchButton.addEventListener('click', getApi);
+function loadButtons() {
+
+    var searchHistStore = JSON.parse(localStorage.getItem('city'));
+
+    if (searchHistStore !== null) {
+        searchHist = searchHistStore
+    }
+    setHistoryButtons();
+};
+
+loadButtons();
+searchButton.addEventListener('click', searchCity);
 
 
